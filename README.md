@@ -1,5 +1,3 @@
-v
-
 ### 介绍
 
 这是一个基于SpringBoot的开源相片展示平台，大致项目架构如下
@@ -57,7 +55,6 @@ spring:
   data:
     redis:
       host: redis连接地址
-   
   mail:
     # 指定邮件服务器地址
     host:  
