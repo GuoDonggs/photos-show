@@ -49,64 +49,26 @@ java -jar furry-image.jar
 
 ```yml
 spring:
-  application:
-    name: show-furry-image
-  profiles:
-    active: dev
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: "010305"
-    url: jdbc:mysql://localhost:3306/furry_image
+    username: 数据库用户名
+    password: 数据库密码
   elasticsearch:
-    uris: http://localhost:9200
+    uris: Elasticsearch 地址
+  data:
+    redis:
+      host: redis连接地址
+   
   mail:
     # 指定邮件服务器地址
-    host: smtp.163.com
+    host:  
     # 登录账户
-    username: qq2818324149@163.com
+    username:  
     # 登录密码
-    password: "KEZXOOEBFPPLESRI"
+    password:  
     # 端口
-    port: 465
-    # 默认编码
-    default-encoding: UTF-8
+    port:  
     # 使用的协议
     protocol: smtps
-    # 其他的属性
-    properties:
-      "mail.smtp.connectiontimeout": 5000
-      "mail.smtp.timeout": 3000
-      "mail.smtp.writetimeout": 5000
-      "mail.smtp.auth": true
-      "mail.smtp.starttls.enable": true
-      "mail.smtp.starttls.required": true
-  cache:
-    type: redis
-    redis:
-      time-to-live: 180000
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 500MB
-  config:
-    import: file:${user.dir}${file.separator}config.yml
-  web:
-    resources:
-      cache:
-        cachecontrol:
-          cache-public: true
-          max-age: 3153600
-          must-revalidate: true
-      static-locations: file:${config.path.base}
-  mvc:
-    static-path-pattern: /raw/**
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-mybatis-plus:
-  global-config:
-    banner: false
 server:
   port: 8081
 # 自定义配置
@@ -118,6 +80,5 @@ config:
   path:
     image: images
     video: videos
-    base: ${user.dir}${file.separator}data${file.separator}
 ```
 
