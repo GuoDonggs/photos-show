@@ -85,7 +85,7 @@ public class UploadFileController {
 
             fileRecordService.addRecord(fileRecord);
         }
-        // 添加关键字
+        // 添加标签
         keywordService.add(param.getKeywords());
         return RUtil.ok();
     }
@@ -122,15 +122,15 @@ public class UploadFileController {
 
     private void assentKeywords(List<String> keywords) {
         for (int i = 0; i < keywords.size(); i++) {
-            if (keywords.get(i).length() > 5) {
-                throw new UserOperationException("关键字长度不能超过5");
+            if (keywords.get(i).length() > 8) {
+                throw new UserOperationException("标签长度不能超过8");
             }
             if (keywords.get(i).isEmpty()) {
-                throw new UserOperationException("关键字不能为空");
+                throw new UserOperationException("标签不能为空");
             }
             String s = keywords.get(i).trim().split("[,，\\s]")[0];
-            if (s.isEmpty() || s.length() > 5) {
-                throw new UserOperationException("关键字格式错误");
+            if (s.isEmpty()) {
+                throw new UserOperationException("标签不能为空");
             }
             keywords.set(i, s);
         }

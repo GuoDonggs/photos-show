@@ -185,9 +185,9 @@ function finishNovice() {
 
   .search-box {
     margin-left: 40px;
-    flex: 1;
     display: flex;
     align-items: center;
+    width: 40%;
     min-width: 300px;
 
     .item {
@@ -207,7 +207,9 @@ function finishNovice() {
 
   @media screen and (max-width: 768px) {
     .search-box {
+      flex: 1;
       margin: 0 20px;
+      width: auto;
       min-width: 200px;
     }
 
@@ -225,6 +227,7 @@ function finishNovice() {
 
 .right-item {
   display: flex;
+
   justify-content: flex-end;
   align-items: center;
   max-width: 30%;
