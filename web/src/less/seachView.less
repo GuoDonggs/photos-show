@@ -1,0 +1,141 @@
+.bg-image {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+.keyword-list {
+  margin: 20px auto;
+  padding: 10px;
+  width: 95%;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  display: flex;
+  overflow-x: auto;
+
+  .item {
+    width: auto;
+    margin-right: 10px;
+    font-size: 20px;
+    font-family: AFKYS;
+    color: white;
+    padding: 5px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .bgc0 {
+    background-color: rgba(159, 231, 228, 0.8);
+  }
+
+  .bgc1 {
+    background-color: rgba(141, 164, 241, 0.8);
+  }
+
+  .bgc2 {
+    background-color: rgba(129, 229, 161, 0.8);
+  }
+
+  .bgc3 {
+    background-color: rgba(234, 241, 146, 0.8);
+  }
+
+  .bgc4 {
+    background-color: rgba(242, 162, 245, 0.8);
+  }
+
+  .bgc5 {
+    background-color: rgba(208, 192, 255, 0.8);
+  }
+
+  .bgc6 {
+    background-color: rgba(231, 193, 167, 0.8);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .keyword-list {
+    margin: 10px auto;
+    padding: 10px;
+    width: 90%;
+
+    .item {
+      margin-right: 10px;
+      font-size: 20px;
+      font-family: AFKYS;
+      color: white;
+      padding: 5px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  }
+}
+
+.keyword-list::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  /**/
+}
+
+.keyword-list::-webkit-scrollbar-track {
+  background: rgba(227, 227, 227, 0.8);
+  border-radius: 2px;
+}
+
+.keyword-list::-webkit-scrollbar-thumb {
+  background: #9a9a9a;
+  border-radius: 10px;
+}
+
+.keyword-list::-webkit-scrollbar-thumb:hover {
+  background: #7a7a7a;
+}
+
+.keyword-list::-webkit-scrollbar-corner {
+  background: #179a16;
+}
+
+.waterfall-box {
+  min-height: 600px;
+  margin: 20px auto;
+  margin-bottom: 0px;
+  width: 95%;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+
+  .waterfall {
+
+    padding: 20px 5px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.4s ease-in-out;
+  }
+
+  .empty {
+    margin: 20px auto;
+    border-radius: 50px;
+
+    :deep(.el-empty__description p) {
+      font-size: 30px;
+      font-family: AFKYS;
+      color: #444444 !important;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .waterfall-box {
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  .waterfall {
+    min-height: 300px;
+  }
+}

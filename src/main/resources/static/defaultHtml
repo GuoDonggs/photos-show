@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>通知</title>
+  </head>
+  <body>
+    <div class="content">
+      <h3 class="title">${title}</h3>
+      <div class="text">${text}</div>
+      <div class="notice">${notice}</div>
+    </div>
+  </body>
+  <style>
+    .content {
+      padding: 20px;
+      box-sizing: border-box;
+      width: 100%;
+      text-align: center;
+      background-color: #2a466d79;
+      border-radius: 10px;
+      color: #fff;
+    }
+    .text {
+      margin: 40px;
+    }
+    .notice {
+      font-size: 16px;
+      color: #ffffff;
+    }
+  </style>
+</html>

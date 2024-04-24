@@ -1,0 +1,108 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: furry-mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=010305
+    command: [ "--character-set-server=utf8mb4","--collation-server=utf8mb4_unicode_ci" ]
+    networks:
+      furry-image:
+        aliases:
+          - mysql
+        ipv4_address: 192.168.0.2
+  elasticsearch:
+    image: elasticsearch:8.11.4
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+    volumes:
+      - D:\b2c\elk\data:/usr/share/elasticsearch/data
+      - D:\b2c\elk\plugins:/usr/share/elasticsearch/plugins
+    container_name: furry-elasticsearch
+    privileged: true
+    environment:
+      - discovery.type=single-node
+    networks:
+      furry-image:
+        aliases:
+          - elasticsearch
+        ipv4_address: 192.168.0.3
+  redis_master1:
+    image: redis:latest
+    container_name: redis_master1
+    restart: always
+    volumes:
+      - D:\b2c\redis\m1:/redis # 映射配置文件
+    networks:
+      furry-image:
+        aliases:
+          - redis_master1
+        ipv4_address: 192.168.0.9
+    command: [ 'redis-server', '/redis/conf/redis.conf' ]
+  redis_master2:
+    image: redis:latest
+    container_name: redis_master2
+    restart: always
+    volumes:
+      - D:\b2c\redis\m2:/redis # 映射配置文件
+    networks:
+      furry-image:
+        aliases:
+          - redis_master2
+        ipv4_address: 192.168.0.10
+    command: [ 'redis-server', '/redis/conf/redis.conf' ]
+  redis_master3:
+    image: redis:latest
+    container_name: redis_master3
+    restart: always
+    volumes:
+      - D:\b2c\redis\m3:/redis # 映射配置文件
+    networks:
+      furry-image:
+        aliases:
+          - redis_master3
+        ipv4_address: 192.168.0.11
+    command: [ 'redis-server', '/redis/conf/redis.conf' ]
+  redis_slave1:
+    image: redis:latest
+    container_name: redis_slave1
+    restart: always
+    volumes:
+      - D:\b2c\redis\s1:/redis # 映射配置文件
+    networks:
+      furry-image:
+        aliases:
+          - redis_slave1
+        ipv4_address: 192.168.0.12
+  redis_slave2:
+    image: redis:latest
+    container_name: redis_slave2
+    restart: always
+    volumes:
+      - D:\b2c\redis\s2:/redis # 映射配置文件
+    networks:
+      furry-image:
+        aliases:
+          - redis_slave2
+        ipv4_address: 192.168.0.13
+    command: [ 'redis-server', '/redis/conf/redis.conf' ]
+  redis_slave3:
+    image: redis:latest
+    container_name: redis_slave3
+    restart: always
+    volumes:
+      - D:\b2c\redis\s3:/redis # 映射配置文件
+    networks:
+      furry-image:
+        aliases:
+          - redis_slave3
+        ipv4_address: 192.168.0.14
+networks:
+  furry-image:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/16
