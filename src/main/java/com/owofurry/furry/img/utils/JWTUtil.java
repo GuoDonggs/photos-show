@@ -21,7 +21,7 @@ public class JWTUtil {
                 .sign(jwtSigner);
     }
 
-    public static String encode(String credential, String principal, String host, int expireTime, int calendarUnit) {
+    public static String encode(String principal, String credential, String host, int expireTime, int calendarUnit) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(calendarUnit, expireTime);
