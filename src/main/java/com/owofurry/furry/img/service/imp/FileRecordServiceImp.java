@@ -82,7 +82,10 @@ public class FileRecordServiceImp implements FileRecordService {
     @FileRecordFilter
     @Cacheable(cacheNames = "file_record:hot", key = "#size")
     public R hot(int size) {
-        return listFile(1, size);
+        QueryWrapper<FileRecord> wrapper = new QueryWrapper<>();
+        wrapper.orderBy(true, false, "lover_num");
+        Page<FileRecord> iPage = new Page<>(1, size);
+        return RUtil.ok(recordMapper.selectPage(iPage, wrapper).getRecords());
     }
 
     @Override
@@ -90,7 +93,7 @@ public class FileRecordServiceImp implements FileRecordService {
     @Cacheable(cacheNames = "file_record:list", key = "#page + ':' + #size")
     public R listFile(int page, int size) {
         QueryWrapper<FileRecord> wrapper = new QueryWrapper<>();
-        wrapper.orderBy(true, false, "lover_num");
+        wrapper.orderBy(true, false, "upload_date");
         Page<FileRecord> iPage = new Page<>(page, size);
         return RUtil.ok(recordMapper.selectPage(iPage, wrapper).getRecords());
     }
@@ -121,7 +124,7 @@ public class FileRecordServiceImp implements FileRecordService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "file_record", key = "'host'")
+    @CacheEvict(cacheNames = "file_record:hot", allEntries = true)
     public void update(FileRecord record) {
         FileRecord r = recordMapper.selectForUpdate(record.getFileId());
         if (r == null) {
@@ -150,21 +153,8 @@ public class FileRecordServiceImp implements FileRecordService {
     }
 
     @Override
-    @CacheEvict(cacheNames = {"file_record:search", "file_record:user",
-            "file_record:hot", "file_record:list"}, allEntries = true)
-    public void deleteRecord(Long... fileId) {
-        for (Long id : fileId) {
-            FileRecord byFileId = findByFileId(id);
-            recordMapper.deleteById(id);
-            File f = new File(pathConfiguration.getBase() + File.separator + byFileId.getFilePath());
-            FileUtil.del(f);
-            redisTemplate.delete("file_record:" + id);
-            imageRepository.deleteById(id);
-        }
-    }
-
-    @Override
-    @CacheEvict(cacheNames = {"file_record:search", "file_record:user",
+    @CacheEvict(cacheNames = {"file_record:search",
+            "file_record:user",
             "file_record:hot", "file_record:list"}, allEntries = true)
     public void deleteRecord(Integer userId, Long... fileId) {
         for (Long id : fileId) {
@@ -172,7 +162,7 @@ public class FileRecordServiceImp implements FileRecordService {
             if (byFileId == null) {
                 continue;
             }
-            if (byFileId.getUploadUser().equals(userId) || UserUtil.getMail().equals("root")) {
+            if (byFileId.getUploadUser().equals(userId) || UserUtil.isAdmin()) {
                 recordMapper.deleteById(id);
                 File f = new File(pathConfiguration.getBase() + File.separator + byFileId.getFilePath());
                 deleteFile(f);
@@ -229,6 +219,7 @@ public class FileRecordServiceImp implements FileRecordService {
 
                 }
             }
+            scan.close();
         });
     }
 

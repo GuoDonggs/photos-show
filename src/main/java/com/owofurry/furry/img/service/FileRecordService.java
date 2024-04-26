@@ -24,7 +24,6 @@ public interface FileRecordService {
 
     void addRecord(FileRecord record);
 
-    void deleteRecord(Long... fileId);
 
     void deleteRecord(Integer userId, Long... fileId);
 
