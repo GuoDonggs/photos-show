@@ -38,6 +38,8 @@ public class KeywordImageDoc implements Serializable {
     private Date uploadDate;
     @Field(index = false)
     private String filePath;
+    @Field(index = false)
+    private boolean hasChecked;
 
     public KeywordImageDoc(FileRecord fileRecord) {
         this(fileRecord.getFileId(),
@@ -48,6 +50,7 @@ public class KeywordImageDoc implements Serializable {
                 fileRecord.getUploadUser(),
                 fileRecord.getLoverNum(),
                 fileRecord.getUploadDate(),
-                fileRecord.getFilePath());
+                fileRecord.getFilePath(),
+                fileRecord.getHasChecked());
     }
 }
