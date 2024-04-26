@@ -21,6 +21,11 @@ onBeforeMount(() => {
   getHotPicture()
   getHelloTimeWord()
   getWaterfallImage()
+  setTimeout(() => {
+    if (carouselItems.value.length === 0) {
+      options.firstLoad = false
+    }
+  }, 5000)
 })
 
 function getHotPicture() {

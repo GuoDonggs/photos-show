@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -42,17 +43,20 @@ public class FileRecordServiceImp implements FileRecordService {
     PathConfiguration pathConfiguration;
     KeywordImageRepository imageRepository;
     ElasticsearchOperations elasticsearchOperations;
+    ExecutorService executorService;
 
     public FileRecordServiceImp(RedisTemplate<String, Object> redisTemplate,
                                 FileRecordMapper recordMapper,
                                 PathConfiguration pathConfiguration,
                                 KeywordImageRepository imageRepository,
-                                ElasticsearchOperations elasticsearchOperations) {
+                                ElasticsearchOperations elasticsearchOperations,
+                                ExecutorService virtualThreadExecutor) {
         this.redisTemplate = redisTemplate;
         this.recordMapper = recordMapper;
         this.pathConfiguration = pathConfiguration;
         this.imageRepository = imageRepository;
         this.elasticsearchOperations = elasticsearchOperations;
+        this.executorService = virtualThreadExecutor;
     }
 
     @PostConstruct
@@ -76,14 +80,14 @@ public class FileRecordServiceImp implements FileRecordService {
 
     @Override
     @FileRecordFilter
-    @Cacheable(cacheNames = "file_record", key = "'hot:' + #size")
+    @Cacheable(cacheNames = "file_record:hot", key = "#size")
     public R hot(int size) {
         return listFile(1, size);
     }
 
     @Override
     @FileRecordFilter
-    @Cacheable(cacheNames = "file_record", key = "'list:' + #page + ':' + #size")
+    @Cacheable(cacheNames = "file_record:list", key = "#page + ':' + #size")
     public R listFile(int page, int size) {
         QueryWrapper<FileRecord> wrapper = new QueryWrapper<>();
         wrapper.orderBy(true, false, "lover_num");
@@ -106,7 +110,7 @@ public class FileRecordServiceImp implements FileRecordService {
     }
 
     @Override
-    @Cacheable(cacheNames = "file_record", key = "'user:' + #user_id + ':' + #page + ':' + #size")
+    @Cacheable(cacheNames = "file_record:user", key = " #user_id + ':' + #page + ':' + #size")
     public R listByUser(int user_id, int page, int size) {
         QueryWrapper<FileRecord> wrapper = new QueryWrapper<>();
         wrapper.eq("upload_user", user_id);
@@ -130,7 +134,9 @@ public class FileRecordServiceImp implements FileRecordService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "file_record:search", allEntries = true)
+    @CacheEvict(cacheNames = {"file_record:search", "file_record:user",
+            "file_record:hot", "file_record:list"},
+            allEntries = true)
     public void addRecord(FileRecord record) {
         recordMapper.insert(record);
         ThreadUtil.execute(() -> {
@@ -144,7 +150,8 @@ public class FileRecordServiceImp implements FileRecordService {
     }
 
     @Override
-    @CacheEvict(cacheNames = {"file_record", "file_record:search"}, allEntries = true)
+    @CacheEvict(cacheNames = {"file_record:search", "file_record:user",
+            "file_record:hot", "file_record:list"}, allEntries = true)
     public void deleteRecord(Long... fileId) {
         for (Long id : fileId) {
             FileRecord byFileId = findByFileId(id);
@@ -157,6 +164,8 @@ public class FileRecordServiceImp implements FileRecordService {
     }
 
     @Override
+    @CacheEvict(cacheNames = {"file_record:search", "file_record:user",
+            "file_record:hot", "file_record:list"}, allEntries = true)
     public void deleteRecord(Integer userId, Long... fileId) {
         for (Long id : fileId) {
             FileRecord byFileId = findByFileId(id);
@@ -183,19 +192,25 @@ public class FileRecordServiceImp implements FileRecordService {
         if (page - 1 >= 0) {
             page--;
         }
-        return RUtil.ok(imageRepository.findKeywordImageByKeywordsLike(keyword, PageRequest.of(page, size)));
+        return RUtil.ok(imageRepository.findKeywordImageByAllStrLikeIgnoreCase(keyword, PageRequest.of(page, size)));
     }
 
     @Override
     public void incrLoverNum(Long fileId) {
         recordMapper.incrLoverNum(fileId);
         redisTemplate.delete("file_record:fileId:" + fileId);
+        ThreadUtil.execute(() -> {
+            imageRepository.save(new KeywordImageDoc(findByFileId(fileId)));
+        });
     }
 
     @Override
     public void decrLoverNum(Long fileId) {
         recordMapper.decrLoverNum(fileId);
         redisTemplate.delete("file_record:fileId:" + fileId);
+        ThreadUtil.execute(() -> {
+            imageRepository.save(new KeywordImageDoc(findByFileId(fileId)));
+        });
     }
 
     /**
@@ -218,7 +233,7 @@ public class FileRecordServiceImp implements FileRecordService {
     }
 
     private void deleteFile(File f) {
-        ThreadUtil.execute(() -> {
+        executorService.execute(() -> {
             while (!FileUtil.del(f)) {
                 log.info("{} 删除失败, 重试中...", f.getAbsolutePath());
                 try {

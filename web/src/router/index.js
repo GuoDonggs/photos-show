@@ -25,12 +25,16 @@ const router = createRouter({
             path: '/user',
             name: 'user',
             component: () => import("@/views/UserView.vue"),
-            mate: {needLogin: true}
+            meta: {needLogin: true}
         }, {
             path: '/upload',
             name: 'upload',
             component: () => import("@/views/UploadFile.vue"),
-            mate: {needLogin: true}
+            meta: {needLogin: true}
+        }, {
+            path: '/detail',
+            name: 'detail',
+            component: () => import("@/views/DetailView.vue"),
         }
     ]
 })

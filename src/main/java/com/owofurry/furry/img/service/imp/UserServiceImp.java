@@ -22,6 +22,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -96,7 +97,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Cacheable(cacheNames = "user", key = "#email +':passwd:' +#credential")
-    public R login(String email, String credential) {
+    public R login(String email, String credential, String address) {
         User user = getUser(email);
         // 如果用户不存在，抛出账户不存在异常
         if (user == null) {
@@ -108,7 +109,7 @@ public class UserServiceImp implements UserService {
         if (user.getUserPassword().equals(SecureUtil.md5(credential + PASSWORD_SALT))) {
             return RUtil.ok(new UserDto(user.getUserId(),
                     user.getUserName(),
-                    JWTUtil.encode(email, user.getUserId().toString())
+                    JWTUtil.encode(email, user.getUserId().toString(), address, 7, Calendar.DATE)
             ));
         }
         throw new UserOperationException("账户或密码错误");

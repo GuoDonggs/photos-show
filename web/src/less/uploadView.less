@@ -10,7 +10,18 @@
   background-color: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   border-radius: 10px;
-  transition: all 1s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+  .mask {
+    height: 10px;
+  }
+
+  .upload-box {
+    padding: 10px;
+    width: 95%;
+    min-height: 300px;
+  }
 }
 
 .upload-btn {
@@ -37,19 +48,31 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .upload-btn {
+    width: 150px;
+    height: 150px;
+    font-size: 40px;
+  }
+}
 
 .image-show {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
 
-  .title {
-    margin-bottom: 20px;
+  .title, .tips {
+    margin-bottom: 10px;
     width: 100%;
     height: 40px;
     text-align: center;
     font-family: AFKYS;
     font-size: 30px;
+  }
+
+  .tips {
+    font-size: 16px;
+    color: #7a7a7a;
   }
 
   .item {
@@ -74,17 +97,30 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .image-show {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 .keyword-box {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
 
-  .title {
+  .title, .tips {
     width: 100%;
     height: 40px;
+    margin-bottom: 10px;
     text-align: center;
     font-family: AFKYS;
     font-size: 30px;
+  }
+
+  .tips {
+    font-size: 16px;
+    color: #7a7a7a;
   }
 
   .item {
@@ -96,7 +132,7 @@
     font-size: 20px;
     font-family: AFKYS;
     color: white;
-    padding: 5px 20px;
+    padding: 8px 20px;
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
@@ -104,6 +140,7 @@
   }
 
   .add-input {
+    padding: 5px;
     display: flex;
     background-color: white;
 
@@ -133,6 +170,51 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .keyword-box {
+    .add-input {
+      width: 250px;
+
+      .input {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.intro {
+
+  .title, .tips {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: AFKYS;
+    font-size: 30px;
+  }
+
+  .title-input {
+    margin-bottom: 20px;
+  }
+}
+
+.upload-submit {
+  margin: 0px auto;
+  margin-top: 20px;
+  width: 60%;
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .upload-submit {
+    margin: 0px auto;
+    margin-top: 20px;
+    width: 90%;
+  }
+}
 
 .bgc0 {
   background-color: rgba(159, 231, 228, 0.8);
@@ -147,7 +229,7 @@
 }
 
 .bgc3 {
-  background-color: rgba(234, 241, 146, 0.8);
+  background-color: rgba(99, 203, 179, 0.8);
 }
 
 .bgc4 {

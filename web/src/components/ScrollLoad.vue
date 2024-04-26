@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 
 const loadNext = defineEmits(['load-next'])
 const props = defineProps({
@@ -18,6 +18,8 @@ onMounted(() => {
   addScroll()
 })
 
+const jitterFiltering = ref({})
+
 function addScroll() {
   window.addEventListener('scroll', () => {
     let element = document.querySelector('.bottom-box'); // 你的元素ID
@@ -26,7 +28,13 @@ function addScroll() {
     // 检查滚动位置是否超过元素位置
     if (position.top <= window.innerHeight && !props.loadFinish) {
       // 触发的事件
-      loadNext('load-next')
+      try {
+        clearTimeout(jitterFiltering.value)
+      } catch (e) {
+      }
+      jitterFiltering.value = setTimeout(() => {
+        loadNext('load-next')
+      }, 300)
     }
   })
 }

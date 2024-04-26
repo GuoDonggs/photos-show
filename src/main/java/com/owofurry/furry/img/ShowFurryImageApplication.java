@@ -6,9 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.io.File;
-import java.io.IOException;
-
 @SpringBootApplication
 @EnableCaching
 @EnableScheduling
@@ -16,19 +13,8 @@ import java.io.IOException;
 public class ShowFurryImageApplication {
 
     public static void main(String[] args) {
-        initConfig();
+       
         SpringApplication.run(ShowFurryImageApplication.class, args);
-    }
-
-    public static void initConfig() {
-        File ymlConfig = new File(System.getProperty("user.dir") + File.separator + "config.yml");
-        if (!ymlConfig.exists()) {
-            try {
-                ymlConfig.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
 }

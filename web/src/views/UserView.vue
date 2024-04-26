@@ -84,11 +84,21 @@ async function setUsername() {
       })
 }
 
-async function allMaskFalse(i) {
-  maskList.forEach(item => {
-    item = false
-  })
-  maskList[i] = true
+const timer = ref({})
+
+async function allMaskFalse(i, delay = false) {
+  try {
+    clearTimeout(timer.value)
+  } catch (e) {
+  }
+  timer.value = setTimeout(() => {
+    maskList.forEach(item => {
+      item = false
+    })
+    if (i !== undefined) {
+      maskList[i] = true
+    }
+  }, delay ? 5000 : 0)
 }
 
 async function deleteImage(fileId) {
@@ -114,12 +124,15 @@ async function deleteImage(fileId) {
     <top-nav :is-fixed="false"/>
     <div v-loading.fullscreen.lock="options.axiosLoading" class="user-view">
       <div class="left-item">
-        <span v-if="system.options.isPc">用户名：</span>
-        <span>{{ user.user.info.username }}</span>
+        <div class="user-name">
+          <span v-if="system.options.isPc">用户名：</span>
+          <span>{{ user.user.info.username }}</span>
+        </div>
         <el-link class="link" type="primary" @click="options.showUsernameDialog = true">
           修改<span v-if="system.options.isPc">用户名</span>
         </el-link>
       </div>
+
       <div class="btn">
         <el-button class="logout" type="danger" @click="logout">退出登录</el-button>
         <el-button class="upload" type="primary" @click="router.push('/upload')">上传图片</el-button>
@@ -133,10 +146,14 @@ async function deleteImage(fileId) {
              class="item"
              @mouseenter="maskList[index] = true"
              @mouseleave="maskList[index] = false"
-             @touchstart="allMaskFalse(index)">
+             @touchend="allMaskFalse(undefined,true)"
+             @touchstart="allMaskFalse(index)"
+        >
           <div class="image">
-            <img :src="imageApi.raw + item.filePath" alt=""
-                 @load="maskList[index] = false"/>
+            <el-image :src="imageApi.raw + item.filePath"
+                      fit="cover"/>
+            <!--            <img :src="imageApi.raw + item.filePath" alt=""-->
+            <!--                 @load="maskList[index] = false"/>-->
           </div>
           <ul v-if="maskList[index]" class="mask">
             <li class="to-detail">
@@ -167,8 +184,8 @@ async function deleteImage(fileId) {
   <!-- 修改用户名弹窗 -->
   <el-dialog
       v-model="options.showUsernameDialog"
+      :width="system.options.isPc?'30%':'80%'"
       title="修改用户名"
-      width="500"
   >
     <el-input v-model="username" :maxlength="6"
               :prefix-icon="User" clearable

@@ -43,7 +43,7 @@ public class LoginController {
         if (!r) {
             throw new UserOperationException("验证码错误");
         }
-        return service.login(login.getEmail(), login.getPassword());
+        return service.login(login.getEmail(), login.getPassword(), RequestAddressUtil.getRemoteAddress(request));
     }
 
 }

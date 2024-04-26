@@ -39,7 +39,9 @@ onMounted(() => {
 })
 
 watch(() => props.data.length, (value, oldValue, onCleanup) => {
-  if (value > oldValue) {
+  if (value <= oldValue) {
+    init()
+  } else {
     loadNextColum()
   }
 })
@@ -84,7 +86,7 @@ const options = reactive({
 
 // 计算出下一个图片放置的列
 function loadNextColum() {
-  if (currentIndex.value >= props.data.length - 1) {
+  if (currentIndex.value > props.data.length - 1) {
     // 判断是否为缓存
     if (!options.userCache) {
       system.cache['waterfall' + props.flag] = {
@@ -125,18 +127,28 @@ function showMask(id, tf) {
   }
 }
 
+const timer = ref({})
+
 // 适配手机点击
-function allMaskFalse(id) {
-  for (let key in masks) {
-    if (key !== id) {
-      if (masks[key] !== undefined) {
-        masks[key].show = false
-      } else {
-        masks[key] = {show: false}
+function allMaskFalse(id, delay = false) {
+  try {
+    clearTimeout(timer.value)
+  } catch (e) {
+  }
+  timer.value = setTimeout(() => {
+    for (let key in masks) {
+      if (key !== id) {
+        if (masks[key] !== undefined) {
+          masks[key].show = false
+        } else {
+          masks[key] = {show: false}
+        }
       }
     }
-  }
-  masks[id].show = true
+    if (id !== undefined) {
+      masks[id].show = true
+    }
+  }, delay ? 5000 : 0)
 }
 
 // 加载是否已经点过赞
@@ -203,10 +215,10 @@ function loveBtn(fileId, i) {
          class="flex-container">
       <div class="column-item">
         <div v-for="item  in column"
-             :key="item.fileId"
              class="image-item"
              @mouseenter="showMask(item.fileId)"
              @mouseleave="showMask([item.fileId], false)"
+             @touchend="allMaskFalse(undefined,true)"
              @touchstart="allMaskFalse(item.fileId)">
           <img :alt="item.keywords" :src="imageApi.raw + item.filePath"
                @error="loadNextColum"
@@ -286,11 +298,8 @@ function loveBtn(fileId, i) {
           width: 100%;
           z-index: 5;
           transition: all 0.5s;
-
-          &:hover {
-            background-color: #FFFFFF99;
-            backdrop-filter: blur(10px);
-          }
+          background-color: #FFFFFF99;
+          backdrop-filter: blur(10px);
 
           .title-area {
             position: relative;

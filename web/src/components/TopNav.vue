@@ -151,10 +151,10 @@ function finishNovice() {
   padding: 0 20px;
   width: 100%;
   height: @nav-height-pc;
-  background-color: rgba(224, 224, 224, 0.4);
+  background-color: rgba(155, 155, 155, 0.4);
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(155, 155, 155, 0.6);
     backdrop-filter: blur(10px);
     transition: all 1s;
   }
@@ -163,7 +163,7 @@ function finishNovice() {
 @media screen and (max-width: 768px) {
   .top-nav {
     padding: 0 10px;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(152, 152, 152, 0.4);
     backdrop-filter: blur(10px);
     justify-content: space-around;
   }
@@ -227,14 +227,13 @@ function finishNovice() {
 
 .right-item {
   display: flex;
-
   justify-content: flex-end;
   align-items: center;
   max-width: 30%;
 
 
   .item {
-    color: #424242;
+    color: #ffffff;
     font-size: 24px;
     font-weight: bolder;
     cursor: pointer;
@@ -247,7 +246,7 @@ function finishNovice() {
     height: 30px;
     line-height: 30px;
     margin-right: 20px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(182, 182, 182, 0.2);
   }
 
   .user {
@@ -261,6 +260,11 @@ function finishNovice() {
 @media screen and (max-width: 768px) {
   .right-item {
     justify-content: flex-start;
+
+    .login {
+      padding: 2px;
+      white-space: nowrap;
+    }
   }
 }
 

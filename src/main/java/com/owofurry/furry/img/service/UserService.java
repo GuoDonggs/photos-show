@@ -8,7 +8,7 @@ public interface UserService {
 
     R register(String email, String credential);
 
-    R login(String email, String credential);
+    R login(String email, String credential, String address);
 
     R resetPasswd(String email, String credential);
 

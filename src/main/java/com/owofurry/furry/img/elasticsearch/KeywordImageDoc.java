@@ -21,9 +21,11 @@ public class KeywordImageDoc implements Serializable {
     @Id
     @Field(type = FieldType.Long)
     Long fileId;
+    @Field(index = false)
+    String keywords;
     @Field(type = FieldType.Text, name = "keyword",
             analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
-    String keywords;
+    String allStr;
     @Field(index = false)
     private String title;
     @Field(index = false)
@@ -40,6 +42,7 @@ public class KeywordImageDoc implements Serializable {
     public KeywordImageDoc(FileRecord fileRecord) {
         this(fileRecord.getFileId(),
                 fileRecord.getKeywords(),
+                fileRecord.getTitle() + " " + fileRecord.getIntroduce() + " " + fileRecord.getKeywords(),
                 fileRecord.getTitle(),
                 fileRecord.getIntroduce(),
                 fileRecord.getUploadUser(),

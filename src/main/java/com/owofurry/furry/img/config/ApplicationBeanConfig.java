@@ -7,6 +7,8 @@ import com.google.common.util.concurrent.Striped;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 
 @SpringBootConfiguration
@@ -22,5 +24,10 @@ public class ApplicationBeanConfig {
     @Bean
     public Striped<Lock> striped() {
         return Striped.lock(32);
+    }
+
+    @Bean
+    public ExecutorService virtualThreadExecutor() {
+        return Executors.newVirtualThreadPerTaskExecutor();
     }
 }

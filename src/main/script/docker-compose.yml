@@ -1,5 +1,19 @@
 version: '3'
 services:
+  furry-image:
+    image: furry-image:1.0
+    volumes:
+      - ./furry-image:/www/data
+      - ./furry-image/logs:/www/config.yml
+    networks:
+      furry-image:
+        - aliases:
+            - furry-image
+    restart: always
+    depends_on:
+      - mysql
+      - redis_master1
+      - elasticsearch
   mysql:
     image: mysql:latest
     container_name: furry-mysql
@@ -19,8 +33,8 @@ services:
         limits:
           memory: 4g
     volumes:
-      - D:\b2c\elk\data:/usr/share/elasticsearch/data
-      - D:\b2c\elk\plugins:/usr/share/elasticsearch/plugins
+      - ./elk/data:/usr/share/elasticsearch/data
+      - ./elk/plugins:/usr/share/elasticsearch/plugins
     container_name: furry-elasticsearch
     privileged: true
     environment:
@@ -35,7 +49,7 @@ services:
     container_name: redis_master1
     restart: always
     volumes:
-      - D:\b2c\redis\m1:/redis # 映射配置文件
+      - ./redis/m1:/redis # 映射配置文件
     networks:
       furry-image:
         aliases:
@@ -47,7 +61,7 @@ services:
     container_name: redis_master2
     restart: always
     volumes:
-      - D:\b2c\redis\m2:/redis # 映射配置文件
+      - ./redis/m2:/redis # 映射配置文件
     networks:
       furry-image:
         aliases:
@@ -59,7 +73,7 @@ services:
     container_name: redis_master3
     restart: always
     volumes:
-      - D:\b2c\redis\m3:/redis # 映射配置文件
+      - ./redis/m3:/redis # 映射配置文件
     networks:
       furry-image:
         aliases:
@@ -71,7 +85,7 @@ services:
     container_name: redis_slave1
     restart: always
     volumes:
-      - D:\b2c\redis\s1:/redis # 映射配置文件
+      - ./redis/s1:/redis # 映射配置文件
     networks:
       furry-image:
         aliases:
@@ -82,7 +96,7 @@ services:
     container_name: redis_slave2
     restart: always
     volumes:
-      - D:\b2c\redis\s2:/redis # 映射配置文件
+      - ./redis/s2:/redis # 映射配置文件
     networks:
       furry-image:
         aliases:
@@ -94,7 +108,7 @@ services:
     container_name: redis_slave3
     restart: always
     volumes:
-      - D:\b2c\redis\s3:/redis # 映射配置文件
+      - ./redis/s3:/redis # 映射配置文件
     networks:
       furry-image:
         aliases:

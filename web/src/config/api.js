@@ -1,4 +1,6 @@
-const root = "http://localhost:8081"
+const root = "https://image.owofurry.fun:11000"
+
+// const root = window.origin + "/api"
 
 export const rootApi = root;
 
@@ -11,7 +13,8 @@ export const imageApi = {
     // /image/search/{str}
     search: root + '/image/search/',
     // /delete/{fileId}
-    deleteFile: root + "/delete/"
+    deleteFile: root + "/delete/",
+    upload: root + '/upload/image'
 }
 
 export const keywordApi = {

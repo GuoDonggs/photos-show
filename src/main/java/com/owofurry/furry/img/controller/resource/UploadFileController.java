@@ -60,6 +60,18 @@ public class UploadFileController {
     @Operation(summary = "上传图片", description = "上传图片，需登录")
     public R uploadFile(@Validated UploadFileParam param,
                         BindingResult bindingResult) throws IOException {
+        //  校验标题
+        if (param.getFiles().length > 1) {
+            param.setIntroduce("");
+            param.setTitle("");
+        } else {
+            if (param.getTitle() != null && param.getTitle().length() > 30) {
+                throw new UserOperationException("标题长度不能超过30");
+            }
+            if (param.getIntroduce() != null && param.getIntroduce().length() > 300) {
+                throw new UserOperationException("介绍长度不能超过100");
+            }
+        }
         assentNotLimit();
         assentKeywords(param.getKeywords());
         assentFileAllow(param.getFiles(), "image");

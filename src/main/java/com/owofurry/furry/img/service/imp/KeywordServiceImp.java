@@ -1,5 +1,7 @@
 package com.owofurry.furry.img.service.imp;
 
+import cn.hutool.core.thread.ThreadUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.owofurry.furry.img.elasticsearch.KeywordDoc;
 import com.owofurry.furry.img.elasticsearch.KeywordRepository;
@@ -54,7 +56,14 @@ public class KeywordServiceImp implements KeywordService {
     public void add(List<String> keywords) {
         int c = keywordMapper.insert(keywords);
         if (c > 0) {
-            keywordRepository.saveAll(keywords.stream().map(KeywordDoc::new).toList());
+            // 异步将新增数据加载到 elasticsearch
+            ThreadUtil.execute(() -> {
+                // 查询新增数据，主要为查询id
+                List<Keyword> keywordList = keywordMapper
+                        .selectList(new QueryWrapper<Keyword>().in("keyword", keywords));
+                assert !keywordList.isEmpty();
+                keywordRepository.saveAll(keywordList.stream().map(KeywordDoc::new).toList());
+            });
         }
     }
 
