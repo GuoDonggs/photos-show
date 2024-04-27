@@ -7,7 +7,8 @@ import {ElMessage} from "element-plus";
 import axiosPlugin from "@/config/axiosPlugin.js";
 import {userStore} from "@/stores/user.js";
 import {useRouter} from "vue-router";
-import {imageApi} from "@/config/api.js";
+import {imageApi, keywordApi} from "@/config/api.js";
+import axios from "axios";
 
 const user = userStore()
 const router = useRouter()
@@ -83,6 +84,26 @@ function addKeyword() {
   keywords.push(options.keywordTmp)
   options.showAddKeyword = false
   options.keywordTmp = ''
+}
+
+function attributeSuggestion(queryString, cb) {
+  if (queryString.trim().length === 0) {
+    cb([])
+    return
+  }
+  axios.get(keywordApi.search + queryString).then(res => {
+    let data = res.data.data
+    let cb_data = []
+    for (let i = 0; i < data.length; i++) {
+      cb_data[i] = {value: data[i].keyword}
+    }
+    cb(cb_data)
+  })
+}
+
+function selectKeyword(item) {
+  options.keywordTmp = item.value
+  addKeyword()
 }
 
 function submit() {
@@ -165,10 +186,16 @@ function submit() {
         </div>
         <div v-show="options.showAddKeyword" class="add-input item ">
           <div class="input">
-            <el-input v-model="options.keywordTmp" :maxlength="6"
-                      clearable
-                      placeholder="请输入关键字，2-8字符"
-                      show-word-limit @keydown.enter="addKeyword"/>
+            <el-autocomplete
+                v-model="options.keywordTmp"
+                :debounce="800"
+                :fetch-suggestions="attributeSuggestion"
+                :maxlength="6"
+                clearable
+                placeholder="请输入关键字，2-8字符"
+                show-word-limit
+                @select="selectKeyword"
+                @keydown.enter="addKeyword"/>
           </div>
           <el-button :icon="Select" circle type="primary" @click="addKeyword"/>
           <el-button :icon="CloseBold" circle type="danger" @click="options.showAddKeyword = false"/>
