@@ -15,5 +15,10 @@ export const systemStore = defineStore('system', () => {
 
     const cache = reactive({})
 
-    return {options, cache}
+    const imageList = reactive({
+        list: [],
+        current: -1
+    })
+
+    return {options, cache, imageList}
 })
