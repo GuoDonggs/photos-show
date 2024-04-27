@@ -43,7 +43,9 @@ public class FileRecordFilterHandler {
                         // 使用反射获得数据中  hasChecked 过滤掉为 false 的对象
                         try {
                             PropertyDescriptor descriptor = new PropertyDescriptor("hasChecked", e.getClass());
-                            return (boolean) descriptor.getReadMethod().invoke(e);
+                            boolean t = (boolean) descriptor.getReadMethod().invoke(e);
+                            if (!t) log.info("过滤掉未审核的图片：{}", e);
+                            return t;
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }

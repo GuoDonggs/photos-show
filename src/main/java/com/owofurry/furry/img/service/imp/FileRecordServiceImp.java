@@ -83,7 +83,7 @@ public class FileRecordServiceImp implements FileRecordService {
     @Cacheable(cacheNames = "file_record:hot", key = "#size")
     public R hot(int size) {
         QueryWrapper<FileRecord> wrapper = new QueryWrapper<>();
-        wrapper.orderBy(true, false, "lover_num");
+        wrapper.orderBy(true, false, List.of("has_checked", "lover_num"));
         Page<FileRecord> iPage = new Page<>(1, size);
         return RUtil.ok(recordMapper.selectPage(iPage, wrapper).getRecords());
     }
@@ -93,7 +93,7 @@ public class FileRecordServiceImp implements FileRecordService {
     @Cacheable(cacheNames = "file_record:list", key = "#page + ':' + #size")
     public R listFile(int page, int size) {
         QueryWrapper<FileRecord> wrapper = new QueryWrapper<>();
-        wrapper.orderBy(true, false, "upload_date");
+        wrapper.orderBy(true, false, List.of("has_checked", "upload_date"));
         Page<FileRecord> iPage = new Page<>(page, size);
         return RUtil.ok(recordMapper.selectPage(iPage, wrapper).getRecords());
     }
@@ -185,6 +185,8 @@ public class FileRecordServiceImp implements FileRecordService {
         return RUtil.ok(imageRepository.findKeywordImageByAllStrLikeIgnoreCase(keyword, PageRequest.of(page, size)));
     }
 
+    @CacheEvict(cacheNames = {"file_record:search", "file_record:hot", "file_record:list"},
+            allEntries = true)
     @Override
     public void incrLoverNum(Long fileId) {
         recordMapper.incrLoverNum(fileId);
@@ -194,6 +196,8 @@ public class FileRecordServiceImp implements FileRecordService {
         });
     }
 
+    @CacheEvict(cacheNames = {"file_record:search", "file_record:hot", "file_record:list"},
+            allEntries = true)
     @Override
     public void decrLoverNum(Long fileId) {
         recordMapper.decrLoverNum(fileId);
