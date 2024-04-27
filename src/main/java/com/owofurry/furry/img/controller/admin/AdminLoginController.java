@@ -3,7 +3,7 @@ package com.owofurry.furry.img.controller.admin;
 import com.owofurry.furry.img.dto.param.RootLoginParam;
 import com.owofurry.furry.img.service.UserService;
 import com.owofurry.furry.img.utils.BindingUtil;
-import com.owofurry.furry.img.utils.RUtil;
+import com.owofurry.furry.img.utils.LimitUtil;
 import com.owofurry.furry.img.utils.RequestAddressUtil;
 import com.owofurry.furry.img.vo.R;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,8 @@ public class AdminLoginController {
     @PostMapping(value = "/login")
     public R login(@RequestBody @Validated RootLoginParam param,
                    BindingResult result, HttpServletRequest request) {
+        LimitUtil.cumulative("admin_login", 5, 5);
         BindingUtil.validate(result);
-        return RUtil.ok(userService.login(param.getUsername(), param.getPasswd(), RequestAddressUtil.getRemoteAddress(request)));
+        return userService.login(param.getUsername(), param.getPasswd(), RequestAddressUtil.getRemoteAddress(request));
     }
 }
