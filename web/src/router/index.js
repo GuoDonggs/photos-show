@@ -35,6 +35,7 @@ const router = createRouter({
             path: '/detail',
             name: 'detail',
             component: () => import("@/views/DetailView.vue"),
+            props: (router) => ({f: router.query.f})
         }
     ]
 })
