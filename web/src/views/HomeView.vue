@@ -1,6 +1,6 @@
 <script setup>
 import TopNav from "@/components/TopNav.vue";
-import {onBeforeMount, reactive, ref} from "vue";
+import {computed, onBeforeMount, reactive, ref} from "vue";
 import axios from "axios";
 import {imageApi} from "@/config/api.js";
 import WaterfallImages from "@/components/WaterfallImages.vue";
@@ -15,6 +15,21 @@ const options = reactive({
   carouselHeight: '100vh',
   helloWord: '早安',
   firstLoad: true
+})
+
+const waterfallColNum = computed(() => {
+  let width = window.innerWidth
+  if (width <= 768) {
+    return 3
+  }
+  if (width <= 1200) {
+    return 4
+  }
+  if (width <= 1900) {
+    return 5
+  }
+  return 6
+
 })
 
 onBeforeMount(() => {
@@ -95,7 +110,7 @@ function getWaterfallImage() {
     </div>
     <div class="waterfall">
       <waterfall-images v-if="waterfallItem.length > 0"
-                        :column-num="system.options.isPc ? 5 : 3"
+                        :column-num="waterfallColNum"
                         :data="waterfallItem"/>
     </div>
     <scroll-load :load-finish="options.waterfallFinish" @load-next="getWaterfallImage"/>
