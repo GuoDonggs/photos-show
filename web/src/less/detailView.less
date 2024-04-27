@@ -1,0 +1,170 @@
+.mask {
+  height: 40px;
+}
+
+.keyword-list {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.56);
+
+  .item {
+    width: auto;
+    margin-right: 10px;
+    font-size: 20px;
+    font-family: AFKYS;
+    color: white;
+    padding: 5px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .keyword-list {
+    width: 100%;
+
+    .item {
+      margin-right: 10px;
+      font-size: 20px;
+      font-family: AFKYS;
+      color: white;
+      padding: 5px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  }
+}
+
+.keyword-list::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  /**/
+}
+
+.keyword-list::-webkit-scrollbar-track {
+  background: rgba(227, 227, 227, 0.8);
+  border-radius: 2px;
+}
+
+.keyword-list::-webkit-scrollbar-thumb {
+  background: #9a9a9a;
+  border-radius: 10px;
+}
+
+.keyword-list::-webkit-scrollbar-thumb:hover {
+  background: #7a7a7a;
+}
+
+.keyword-list::-webkit-scrollbar-corner {
+  background: #179a16;
+}
+
+.detail-view {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  margin: 0 auto;
+  width: 95%;
+
+
+  .img-container,
+  .info-container {
+    padding: 20px;
+    width: 70%;
+    height: 600px;
+    background-color: rgba(173, 173, 173, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .img {
+      height: 100%;
+      border-radius: 20px;
+    }
+  }
+
+  .info-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    width: 28%;
+
+    .item1 {
+      padding: 20px 10px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .upload-date {
+      font-size: 16px;
+      color: white;
+      font-family: AFKYS;
+    }
+
+    .introduce {
+      flex: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .detail-view {
+    width: 98%;
+    flex-direction: column;
+
+    .img-container,
+    .info-container {
+      width: 100%;
+      padding: 5px;
+    }
+
+    .img-container {
+      height: 600px;
+
+      .img {
+        padding: 0 5px;
+      }
+    }
+
+    .info-container {
+      margin: 20px 0 0 0;
+      height: auto;
+    }
+  }
+}
+
+
+.bgc0 {
+  background-color: rgba(159, 231, 228, 0.8);
+}
+
+.bgc1 {
+  background-color: rgba(141, 164, 241, 0.8);
+}
+
+.bgc2 {
+  background-color: rgba(129, 229, 161, 0.8);
+}
+
+.bgc3 {
+  background-color: rgba(99, 203, 179, 0.8);
+}
+
+.bgc4 {
+  background-color: rgba(242, 162, 245, 0.8);
+}
+
+.bgc5 {
+  background-color: rgba(208, 192, 255, 0.8);
+}
+
+.bgc6 {
+  background-color: rgba(231, 193, 167, 0.8);
+}
+
