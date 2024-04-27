@@ -78,7 +78,6 @@ function init() {
 
 const options = reactive({
   retry: false,
-  loading: true,
   userCache: false,
   minHeight: '',
   loadCacheNum: 0
@@ -95,10 +94,10 @@ function loadNextColum() {
         height: document.querySelector(".waterfall-images").clientHeight
       }
     }
-    options.loading = false;
+
     return
   }
-  options.loading = true;
+
   const doms = document.querySelectorAll(".waterfall-images .flex-container");
   const mindom = Array.from(doms).reduce((min, dom) =>
       dom.querySelector(".column-item").clientHeight
@@ -197,14 +196,18 @@ function loveBtn(fileId, i) {
           ElMessage.error(res.response.data.msg)
         })
   }
+}
 
+function toDetail(id) {
+  system.imageList.list = props.data
+  system.imageList.current = id
+  router.push({path: "/detail", query: {f: router.currentRoute.value.fullPath}})
 }
 
 </script>
 
 <template>
-  <div v-loading="options.loading"
-       :style="{'min-height':options.minHeight}"
+  <div :style="{'min-height':options.minHeight}"
        class="waterfall-images"
        element-loading-background="rgba(255,255,255,0.5)"
        element-loading-text="loading">
@@ -232,8 +235,9 @@ function loveBtn(fileId, i) {
                 {{ item.title.length === 0 ? "owo" : item.title }}
               </div>
               <div class="btn">
-                <el-button :icon="Right" circle type="primary"
-                           @click="$router.push({path:'/detail',query:{id:item.fileId}})"
+                <el-button :icon="Right" circle size="small"
+                           type="primary"
+                           @click="toDetail(item.fileId)"
                 />
               </div>
             </div>
@@ -319,7 +323,7 @@ function loveBtn(fileId, i) {
 
             .btn {
               position: absolute;
-              right: 5px;
+              right: 0;
               z-index: 10;
             }
           }
