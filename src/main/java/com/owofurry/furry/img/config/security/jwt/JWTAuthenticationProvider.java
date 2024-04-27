@@ -35,6 +35,7 @@ public class JWTAuthenticationProvider implements AuthenticationProvider {
         // 解码jwt
         JWTAuthenticationToken decodeJwtToken = JWTUtil.decode(jwtStr);
         String jwtHost = decodeJwtToken.getHost().replace("null", "");
+        log.info("用户尝试验证JWT信息，jwtHost: {}  requestHost:{}", jwtHost, provideHost);
         if (!jwtHost.isEmpty() && !jwtHost.equals(provideHost)) {
             throw new BadCredentialsException("未登录");
         }
