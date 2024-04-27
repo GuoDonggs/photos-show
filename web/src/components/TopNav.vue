@@ -13,6 +13,10 @@ const props = defineProps({
   isFixed: {
     type: Boolean,
     default: false
+  },
+  blur: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -62,7 +66,7 @@ function finishNovice() {
 
 
 <template>
-  <div :class="{'fixed': props.isFixed}" class="top-nav">
+  <div :class="{'fixed': props.isFixed,'blur':props.blur}" class="top-nav">
     <div class="left-item">
       <h3 class="logo-title" @click="router.push('/')">
         毛 <span v-if="system.options.isPc">绒 墙</span>
@@ -152,12 +156,15 @@ function finishNovice() {
   width: 100%;
   height: @nav-height-pc;
   background-color: rgba(155, 155, 155, 0.4);
+  transition: all 1s;
 
   &:hover {
-    background-color: rgba(155, 155, 155, 0.6);
     backdrop-filter: blur(10px);
-    transition: all 1s;
   }
+}
+
+.blur {
+  backdrop-filter: blur(10px);
 }
 
 @media screen and (max-width: 768px) {
